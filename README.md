@@ -6,6 +6,7 @@
 | Naufal Taufiq Ridwan     | 120140044 | Project Manager + Programmer | [n0l3r](https://github.com/n0l3r) |
 | Satrio Maruli Jaya Sianturi     | 120140238 | Programmer + Design | [Satriomj](https://github.com/Satriomj) |
 | Muhamad Bintang Fitriatuderajat   | 120140040 | Programmer | [DaenerysI](https://github.com/DaenerysI) |
+| Muhammad Rizky Fahreza Gusti   | 120140071 | Programmer + Design | [DaenerysI](https://github.com/MuhammadRizkyFahreza) |
 
 </div>
 
