@@ -7,6 +7,7 @@
 | Satrio Maruli Jaya Sianturi     | 120140238 | Programmer + Design | [Satriomj](https://github.com/Satriomj) |
 | Muhamad Bintang Fitriatuderajat   | 120140040 | Programmer | [DaenerysI](https://github.com/DaenerysI) |
 | Muhammad Rizky Fahreza Gusti   | 120140071 | Programmer + Design | [MuhammadRizkyFahreza](https://github.com/MuhammadRizkyFahreza) |
+| M. Herton Amarta Buana   | 120140182 | Programmer | [Hrtnn](https://github.com/Hrtnn) |
 
 </div>
 
