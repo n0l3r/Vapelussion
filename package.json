@@ -1,21 +1,23 @@
 {
+  "dependencies": {
+    "express": "^4.18.2"
+  },
   "name": "vapelussion",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "description": "backend for apps vapelussion",
+  "main": "index.js",
+  "devDependencies": {},
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "expo": "~47.0.3",
-    "expo-status-bar": "~1.4.2",
-    "react": "18.1.0",
-    "react-native": "0.70.5"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n0l3r/Vapelussion.git"
   },
-  "devDependencies": {
-    "@babel/core": "^7.12.9"
+  "author": "minimal Xpander",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n0l3r/Vapelussion/issues"
   },
-  "private": true
+  "homepage": "https://github.com/n0l3r/Vapelussion#readme"
 }
