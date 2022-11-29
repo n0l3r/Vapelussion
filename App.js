@@ -16,12 +16,12 @@ const App = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView>
-        <ExpoStatusBar style={Platform.OS === 'ios' ? 'light' : 'dark'} />
+        <ExpoStatusBar backgroundColor={Colors.bgHeader} style="light" />
       </SafeAreaView>
       <View style={styles.header}>
         <View style={styles.inputGroup}>
           <Icon name="magnify" size={30} color={Colors.secondary} />
-          <TextInput style={styles.input} placeholder="Search..."/>
+          <TextInput style={styles.input} placeholder="Search..." placeholderTextColor={Colors.secondary} />
         </View>
         <Icon name="bell-outline" size={30} color={Colors.secondary} />
         <Icon name="cart-outline" size={30} color={Colors.secondary} />
