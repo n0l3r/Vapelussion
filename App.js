@@ -1,20 +1,119 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { StyleSheet, TextInput, Text, View, StatusBar, SafeAreaView, Platform } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function App() {
+// Screens
+import { Home, Wishlist, Chat, Profile } from './screens';
+// utils
+import Colors from './utils';
+
+const { Screen, Navigator } = createBottomTabNavigator();
+
+const App = () => {
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <SafeAreaView>
+        <ExpoStatusBar style={Platform.OS === 'ios' ? 'light' : 'dark'} />
+      </SafeAreaView>
+      <View style={styles.header}>
+        <View style={styles.inputGroup}>
+          <Icon name="magnify" size={30} color={Colors.secondary} />
+          <TextInput style={styles.input} placeholder="Search..."/>
+        </View>
+        <Icon name="bell-outline" size={30} color={Colors.secondary} />
+        <Icon name="cart-outline" size={30} color={Colors.secondary} />
+      </View>
+      <NavigationContainer>
+        <Navigator screenOptions={screenOptions}>
+          <Screen name="Home" component={Home} options={homeOptions} />
+          <Screen name="Wishlist" component={Wishlist} options={wishlistOptions} />
+          <Screen name="Chat" component={Chat} options={chatOptions} />
+          <Screen name="Profile" component={Profile} options={profileOptions} />
+        </Navigator>
+      </NavigationContainer>
     </View>
-  );
+
+
+  )
 }
+
+const screenOptions = {
+  headerShown: false,
+  tabBarShowLabel: false,
+  tabBarActiveTintColor: '#fff',
+  tabBarInactiveTintColor: '#94A0AD',
+  tabBarStyle: {
+    paddingVertical: 10,
+    height: 70,
+    backgroundColor: Colors.bgHeader,
+    position: 'absolute',
+    bottom: 0,
+    borderTopWidth: 0,
+  },
+}
+
+const homeOptions = {
+  tabBarIcon: ({ color, size }) => (
+    <Icon name={color === '#fff' ? 'home' : 'home-outline'} color={color} size="30" />
+  )
+}
+
+const wishlistOptions = {
+  tabBarIcon: ({ color, size }) => (
+    <Icon name={color === '#fff' ? 'heart' : 'heart-outline'} color={color} size="30" />
+  )
+}
+
+const chatOptions = {
+  tabBarIcon: ({ color, size }) => (
+    <Icon name={color === '#fff' ? 'chat' : 'chat-outline'} color={color} size="30" />
+  )
+}
+
+const profileOptions = {
+  tabBarIcon: ({ color, size }) => (
+    <Icon name={color === '#fff' ? 'account' : 'account-outline'} color={color} size="30" />
+  )
+}
+
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: Colors.bgHeader,
+    marginTop: StatusBar.currentHeight,
   },
+  header: {
+    flexDirection: 'row',
+    height: '8%',
+    backgroundColor: Colors.bgHeader,
+    paddingHorizontal: '4%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: Platform.OS === 'ios' ? -10 : 10,
+  },
+  inputGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.bgDark,
+    borderRadius: 30,
+    paddingHorizontal: '2%',
+    width: '75%',
+    height: '60%',
+  },
+  input: {
+    marginLeft: '2%',
+    width: '81%',
+    fontSize: 18,
+    height: '90%',
+    color: Colors.secondary,
+    backgroundColor: Colors.bgDark,
+  },
+
 });
