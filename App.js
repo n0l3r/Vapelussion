@@ -1,5 +1,4 @@
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
 import { StyleSheet, TextInput, Text, View, StatusBar, SafeAreaView, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -47,7 +46,7 @@ const screenOptions = {
   tabBarActiveTintColor: '#fff',
   tabBarInactiveTintColor: '#94A0AD',
   tabBarStyle: {
-    paddingVertical: 10,
+    paddingVertical: 5,
     height: 70,
     backgroundColor: Colors.bgHeader,
     position: 'absolute',
@@ -57,26 +56,26 @@ const screenOptions = {
 }
 
 const homeOptions = {
-  tabBarIcon: ({ color, size }) => (
-    <Icon name={color === '#fff' ? 'home' : 'home-outline'} color={color} size="30" />
+  tabBarIcon: ({ focused, color }) => (
+    <Icon name={focused ? 'home' : 'home-outline'} color={color} size={30} />
   )
 }
 
 const wishlistOptions = {
-  tabBarIcon: ({ color, size }) => (
-    <Icon name={color === '#fff' ? 'heart' : 'heart-outline'} color={color} size="30" />
+  tabBarIcon: ({ focused, color }) => (
+    <Icon name={focused ? 'heart' : 'heart-outline'} color={color} size={30} />
   )
 }
 
 const chatOptions = {
-  tabBarIcon: ({ color, size }) => (
-    <Icon name={color === '#fff' ? 'chat' : 'chat-outline'} color={color} size="30" />
+  tabBarIcon: ({ focused, color }) => (
+    <Icon name={focused ? 'chat' : 'chat-outline'} color={color} size={30} />
   )
 }
 
 const profileOptions = {
-  tabBarIcon: ({ color, size }) => (
-    <Icon name={color === '#fff' ? 'account' : 'account-outline'} color={color} size="30" />
+  tabBarIcon: ({ focused, color }) => (
+    <Icon name={focused ? 'account' : 'account-outline'} color={color} size={30} />
   )
 }
 
