@@ -11,6 +11,7 @@ const Colors = {
     blue: '#4A81D4',
     dark: '#323A46',
     foreground: '#37424C',
+    light: '#ffffff',
 }
 
 export default Colors
