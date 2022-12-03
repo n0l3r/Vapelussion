@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Screens
-import { Home, Wishlist, Chat, Profile } from './screens';
+import { Home, Wishlist, Notification, Profile } from './screens';
 // utils
 import Colors from './utils';
 
@@ -23,14 +23,13 @@ const App = () => {
           <Icon name="magnify" size={30} color={Colors.secondary} />
           <TextInput style={styles.input} placeholder="Search..." placeholderTextColor={Colors.secondary} />
         </View>
-        <Icon name="bell-outline" size={30} color={Colors.secondary} />
         <Icon name="cart-outline" size={30} color={Colors.secondary} />
       </View>
       <NavigationContainer>
         <Navigator screenOptions={screenOptions}>
           <Screen name="Home" component={Home} options={homeOptions} />
           <Screen name="Wishlist" component={Wishlist} options={wishlistOptions} />
-          <Screen name="Chat" component={Chat} options={chatOptions} />
+          <Screen name="Notification" component={Notification} options={notificationOptions} />
           <Screen name="Profile" component={Profile} options={profileOptions} />
         </Navigator>
       </NavigationContainer>
@@ -39,6 +38,8 @@ const App = () => {
 
   )
 }
+
+
 
 const screenOptions = {
   headerShown: false,
@@ -67,9 +68,9 @@ const wishlistOptions = {
   )
 }
 
-const chatOptions = {
+const notificationOptions = {
   tabBarIcon: ({ focused, color }) => (
-    <Icon name={focused ? 'chat' : 'chat-outline'} color={color} size={30} />
+    <Icon name={focused ? 'bell' : 'bell-outline'} color={color} size={30} />
   )
 }
 
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgDark,
     borderRadius: 30,
     paddingHorizontal: '2%',
-    width: '75%',
+    width: '90%',
     height: '60%',
   },
   input: {
