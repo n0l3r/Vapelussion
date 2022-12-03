@@ -1,22 +1,25 @@
-import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, Dimensions } from 'react-native'
+import { useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-// colors
-import Colors from '../utils';
+import Header from '../components/Header';
 
-const Cart = () => {
+// colors
+import { Colors, screenOptions } from '../utils';
+
+
+const Cart = ({ navigation }) => {
+    useEffect(() => {
+        navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
+    }, [navigation])
+    const back = () => {
+        navigation.getParent().setOptions({ tabBarStyle: screenOptions.tabBarStyle });
+        navigation.goBack();
+    }
+
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <View style={styles.inputGroup}>
-                    <Icon name="magnify" size={30} color={Colors.secondary} />
-                    <TextInput style={styles.input} placeholder="Search..." placeholderTextColor={Colors.secondary} />
-                </View>
-                <Pressable onPress={() => navigation.navigate('Cart')}>
-                    <Icon name="cart-outline" size={30} color={Colors.secondary} />
-                </Pressable>
-
-            </View>
+            <Header title="Cart" back={back} />
 
             <ScrollView style={styles.body}>
                 {/* Card Info Profile */}
@@ -63,39 +66,13 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.bgDark,
         padding: 10,
     },
-    header: {
-        flexDirection: 'row',
-        height: '8%',
-        backgroundColor: Colors.bgHeader,
-        paddingHorizontal: '4%',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: Platform.OS === 'ios' ? -10 : 0,
-    },
-    inputGroup: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: Colors.bgDark,
-        borderRadius: 30,
-        paddingHorizontal: '2%',
-        width: '90%',
-        height: '60%',
-    },
-    input: {
-        marginLeft: '2%',
-        width: '81%',
-        fontSize: 18,
-        height: '90%',
-        color: Colors.secondary,
-        backgroundColor: Colors.bgDark,
-    },
     content: {
         marginBottom: 20,
     },
     cardHorizontal: {
         flexDirection: 'row',
         width: Dimensions.get('window').width - 25,
-        height: 100,
+        height: 150,
         borderRadius: 10,
         elevation: 5,
         marginRight: 10,
@@ -103,13 +80,13 @@ const styles = StyleSheet.create({
         padding: 15,
     },
     cardImgHorizontal: {
-        width: 80,
+        width: '30%',
         height: '100%',
         borderRadius: 5,
         backgroundColor: Colors.secondary,
     },
     cardContentHorizontal: {
-        width: '58%',
+        width: '50%',
         height: '100%',
         paddingLeft: 15,
         justifyContent: 'space-between',

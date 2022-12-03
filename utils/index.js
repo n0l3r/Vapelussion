@@ -12,6 +12,22 @@ const Colors = {
     dark: '#323A46',
     foreground: '#37424C',
     light: '#ffffff',
-}
+};
 
-export default Colors
+const screenOptions = {
+    headerShown: false,
+    tabBarShowLabel: false,
+    tabBarActiveTintColor: '#fff',
+    tabBarInactiveTintColor: '#94A0AD',
+    tabBarStyle: {
+        paddingVertical: 5,
+        height: 70,
+        backgroundColor: Colors.bgHeader,
+        position: 'absolute',
+        bottom: 0,
+        borderTopWidth: 0,
+    }
+
+};
+
+export { Colors, screenOptions }

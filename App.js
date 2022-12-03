@@ -1,25 +1,21 @@
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
-import { StyleSheet, View, StatusBar, SafeAreaView } from 'react-native';
-import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { StyleSheet, View, StatusBar, SafeAreaView,} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-// Screens
-import { Home, Wishlist, Notification, Profile, Cart } from './screens';
-// utils
-import Colors from './utils';
+import HomeStack from './stack/HomeStack';
+import WishlistStack from './stack/WishlistStack';
+import NotificationStack from './stack/NotificationStack';
+import ProfileStack from './stack/ProfileStack';
+
+import { Colors, screenOptions } from './utils';
 
 const { Screen, Navigator } = createBottomTabNavigator();
 
-const isVisible = (route) => {
-    const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
-    const pageVisible = ['Home', 'Wishlist', 'Notification', 'Profile'];
-    return pageVisible.includes(routeName);
-}
+
 
 const App = () => {
-
   return (
     <View style={styles.container}>
       <SafeAreaView>
@@ -27,28 +23,11 @@ const App = () => {
       </SafeAreaView>
 
       <NavigationContainer>
-        <Navigator screenOptions={
-          ({ route }) => ({
-            headerShown: false,
-            tabBarShowLabel: false,
-            tabBarActiveTintColor: '#fff',
-            tabBarInactiveTintColor: '#94A0AD',
-            tabBarStyle: {
-              display: isVisible(route) ? 'flex' : 'none',
-              paddingVertical: 5,
-              height: 70,
-              backgroundColor: Colors.bgHeader,
-              position: 'absolute',
-              bottom: 0,
-              borderTopWidth: 0,
-            }
-          })
-
-        }>
-          <Screen name="HomeNav" component={HomeNav} options={homeOptions} />
-          <Screen name="Wishlist" component={Wishlist} options={wishlistOptions} />
-          <Screen name="Notification" component={Notification} options={notificationOptions} />
-          <Screen name="Profile" component={Profile} options={profileOptions} />
+        <Navigator screenOptions={screenOptions}>
+          <Screen name="HomeStack" component={HomeStack} options={homeOptions} />
+          <Screen name="WishlistStack" component={WishlistStack} options={wishlistOptions} />
+          <Screen name="NotificationStack" component={NotificationStack} options={notificationOptions} />
+          <Screen name="ProfileStack" component={ProfileStack} options={profileOptions} />
         </Navigator>
       </NavigationContainer>
     </View>
@@ -56,19 +35,6 @@ const App = () => {
 
   )
 }
-
-
-const homeNav = createStackNavigator();
-
-const HomeNav = () => {
-  return (
-    <homeNav.Navigator>
-      <homeNav.Screen name="Home" component={Home} options={{ headerShown: false }} />
-      <homeNav.Screen name="Cart" component={Cart} options={{ headerShown: false }} />
-    </homeNav.Navigator>
-  )
-}
-
 
 const homeOptions = {
   tabBarIcon: ({ focused, color }) => (

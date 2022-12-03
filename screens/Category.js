@@ -1,14 +1,25 @@
+import { useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Dimensions, TextInput, Pressable } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import Header from '../components/Header';
 
 // colors
 import { Colors, screenOptions } from '../utils';
 
-const Wishlist = ({ navigation }) => {
+const Category = ({ navigation }) => {
+    useEffect(() => {
+        navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
+    }, [navigation])
+    
+    const back = () => {
+        navigation.getParent().setOptions({ tabBarStyle: screenOptions.tabBarStyle });
+        navigation.goBack();
+    }
+
     return (
         <View style={styles.container}>
-            <Header title="Wishlist" />
+            <Header title="Category" back={back} />
             <ScrollView style={styles.body}>
                 <View style={styles.content}>
                     <View style={styles.cardVertical}>
@@ -21,7 +32,7 @@ const Wishlist = ({ navigation }) => {
                             </View>
 
                             {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
+                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
                         </View>
                     </View>
 
@@ -35,7 +46,7 @@ const Wishlist = ({ navigation }) => {
                             </View>
 
                             {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
+                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
                         </View>
                     </View>
 
@@ -49,7 +60,7 @@ const Wishlist = ({ navigation }) => {
                             </View>
 
                             {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
+                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
                         </View>
                     </View>
 
@@ -63,7 +74,7 @@ const Wishlist = ({ navigation }) => {
                             </View>
 
                             {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
+                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
                         </View>
                     </View>
 
@@ -77,7 +88,7 @@ const Wishlist = ({ navigation }) => {
                             </View>
 
                             {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
+                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
                         </View>
                     </View>
 
@@ -91,7 +102,7 @@ const Wishlist = ({ navigation }) => {
                             </View>
 
                             {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
+                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
                         </View>
                     </View>
 
@@ -105,7 +116,7 @@ const Wishlist = ({ navigation }) => {
                             </View>
 
                             {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
+                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
                         </View>
                     </View>
 
@@ -119,7 +130,7 @@ const Wishlist = ({ navigation }) => {
                             </View>
 
                             {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
+                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
                         </View>
                     </View>
                 </View>
@@ -128,14 +139,13 @@ const Wishlist = ({ navigation }) => {
     )
 }
 
-export default Wishlist
+export default Category
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
         backgroundColor: Colors.bgDark,
-        paddingBottom: '15%'
     },
     body: {
         flex: 1,

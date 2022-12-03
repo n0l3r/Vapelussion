@@ -1,22 +1,14 @@
 import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput,Pressable} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Header from '../components/Header';
 
 // colors
-import Colors from '../utils';
+import { Colors, screenOptions } from '../utils';
 
 const Profile = () => {
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <View style={styles.inputGroup}>
-                    <Icon name="magnify" size={30} color={Colors.secondary} />
-                    <TextInput style={styles.input} placeholder="Search..." placeholderTextColor={Colors.secondary} />
-                </View>
-                <Pressable onPress={() => navigation.navigate('Cart')}>
-                    <Icon name="cart-outline" size={30} color={Colors.secondary} />
-                </Pressable>
-
-            </View>
+            <Header title="Profile" />
 
         <ScrollView style={styles.body}>
             {/* Card Info Profile */}
@@ -87,6 +79,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         backgroundColor: Colors.bgDark,
+        paddingBottom: '15%'
     },
     body: {
         flex: 1,
