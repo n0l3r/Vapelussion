@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput,Pressable} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // colors
@@ -6,7 +6,19 @@ import Colors from '../utils';
 
 const Profile = () => {
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <View style={styles.inputGroup}>
+                    <Icon name="magnify" size={30} color={Colors.secondary} />
+                    <TextInput style={styles.input} placeholder="Search..." placeholderTextColor={Colors.secondary} />
+                </View>
+                <Pressable onPress={() => navigation.navigate('Cart')}>
+                    <Icon name="cart-outline" size={30} color={Colors.secondary} />
+                </Pressable>
+
+            </View>
+
+        <ScrollView style={styles.body}>
             {/* Card Info Profile */}
             <View style={styles.content}>
                 <View style={styles.cardHorizontal}>
@@ -64,6 +76,7 @@ const Profile = () => {
                 </View>
             </View>
         </ScrollView>
+        </View>
     )
 }
 
@@ -74,7 +87,38 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         backgroundColor: Colors.bgDark,
-        padding: '3%',
+    },
+    body: {
+        flex: 1,
+        flexDirection: 'column',
+        backgroundColor: Colors.bgDark,
+        padding: 10,
+    },
+    header: {
+        flexDirection: 'row',
+        height: '8%',
+        backgroundColor: Colors.bgHeader,
+        paddingHorizontal: '4%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: Platform.OS === 'ios' ? -10 : 0,
+    },
+    inputGroup: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: Colors.bgDark,
+        borderRadius: 30,
+        paddingHorizontal: '2%',
+        width: '90%',
+        height: '60%',
+    },
+    input: {
+        marginLeft: '2%',
+        width: '81%',
+        fontSize: 18,
+        height: '90%',
+        color: Colors.secondary,
+        backgroundColor: Colors.bgDark,
     },
     content: {
         marginBottom: 20,
