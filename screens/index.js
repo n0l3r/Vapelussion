@@ -1,6 +1,6 @@
 import Home from './Home';
 import Wishlist from './Wishlist';
-import Chat from './Chat';
 import Profile from './Profile';
+import Notification from './Notification';
 
-export { Home, Wishlist, Chat, Profile };
+export { Home, Wishlist, Profile, Notification };
