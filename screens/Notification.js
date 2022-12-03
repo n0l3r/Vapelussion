@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // colors
-import { Colors, Shadow } from '../utils';
+import Colors from '../utils';
 
 const Notification = () => {
     return (
