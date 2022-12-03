@@ -1,15 +1,22 @@
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
-import { StyleSheet, TextInput, Text, View, StatusBar, SafeAreaView, Platform } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { StyleSheet, View, StatusBar, SafeAreaView } from 'react-native';
+import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Screens
-import { Home, Wishlist, Notification, Profile } from './screens';
+import { Home, Wishlist, Notification, Profile, Cart } from './screens';
 // utils
 import Colors from './utils';
 
 const { Screen, Navigator } = createBottomTabNavigator();
+
+const isVisible = (route) => {
+    const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+    const pageVisible = ['Home', 'Wishlist', 'Notification', 'Profile'];
+    return pageVisible.includes(routeName);
+}
 
 const App = () => {
 
@@ -18,16 +25,27 @@ const App = () => {
       <SafeAreaView>
         <ExpoStatusBar backgroundColor={Colors.bgHeader} style="light" />
       </SafeAreaView>
-      <View style={styles.header}>
-        <View style={styles.inputGroup}>
-          <Icon name="magnify" size={30} color={Colors.secondary} />
-          <TextInput style={styles.input} placeholder="Search..." placeholderTextColor={Colors.secondary} />
-        </View>
-        <Icon name="cart-outline" size={30} color={Colors.secondary} />
-      </View>
+
       <NavigationContainer>
-        <Navigator screenOptions={screenOptions}>
-          <Screen name="Home" component={Home} options={homeOptions} />
+        <Navigator screenOptions={
+          ({ route }) => ({
+            headerShown: false,
+            tabBarShowLabel: false,
+            tabBarActiveTintColor: '#fff',
+            tabBarInactiveTintColor: '#94A0AD',
+            tabBarStyle: {
+              display: isVisible(route) ? 'flex' : 'none',
+              paddingVertical: 5,
+              height: 70,
+              backgroundColor: Colors.bgHeader,
+              position: 'absolute',
+              bottom: 0,
+              borderTopWidth: 0,
+            }
+          })
+
+        }>
+          <Screen name="HomeNav" component={HomeNav} options={homeOptions} />
           <Screen name="Wishlist" component={Wishlist} options={wishlistOptions} />
           <Screen name="Notification" component={Notification} options={notificationOptions} />
           <Screen name="Profile" component={Profile} options={profileOptions} />
@@ -40,21 +58,17 @@ const App = () => {
 }
 
 
+const homeNav = createStackNavigator();
 
-const screenOptions = {
-  headerShown: false,
-  tabBarShowLabel: false,
-  tabBarActiveTintColor: '#fff',
-  tabBarInactiveTintColor: '#94A0AD',
-  tabBarStyle: {
-    paddingVertical: 5,
-    height: 70,
-    backgroundColor: Colors.bgHeader,
-    position: 'absolute',
-    bottom: 0,
-    borderTopWidth: 0,
-  },
+const HomeNav = () => {
+  return (
+    <homeNav.Navigator>
+      <homeNav.Screen name="Home" component={Home} options={{ headerShown: false }} />
+      <homeNav.Screen name="Cart" component={Cart} options={{ headerShown: false }} />
+    </homeNav.Navigator>
+  )
 }
+
 
 const homeOptions = {
   tabBarIcon: ({ focused, color }) => (
@@ -89,31 +103,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgHeader,
     marginTop: StatusBar.currentHeight,
   },
-  header: {
-    flexDirection: 'row',
-    height: '8%',
-    backgroundColor: Colors.bgHeader,
-    paddingHorizontal: '4%',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: Platform.OS === 'ios' ? -10 : 10,
-  },
-  inputGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.bgDark,
-    borderRadius: 30,
-    paddingHorizontal: '2%',
-    width: '90%',
-    height: '60%',
-  },
-  input: {
-    marginLeft: '2%',
-    width: '81%',
-    fontSize: 18,
-    height: '90%',
-    color: Colors.secondary,
-    backgroundColor: Colors.bgDark,
-  },
+
 
 });
