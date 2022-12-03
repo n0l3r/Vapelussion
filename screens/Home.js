@@ -94,19 +94,21 @@ const Home = ({ navigation }) => {
                     <Text style={styles.title}>Offers</Text>
                     <View style={styles.horizontalScroll}>
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
-                            <View style={styles.cardVertical}>
-                                <View style={styles.cardHeader}>
-                                </View>
-                                <View style={styles.cardFooter}>
-                                    <View style={styles.cardFooterLeft}>
-                                        <Text style={styles.cardTitle}>Title</Text>
-                                        <Text style={styles.cardPrice}>$ 100</Text>
+                            <Pressable onPress={() => navigation.navigate('DetailProduct')}>
+                                <View style={styles.cardVertical}>
+                                    <View style={styles.cardHeader}>
                                     </View>
+                                    <View style={styles.cardFooter}>
+                                        <View style={styles.cardFooterLeft}>
+                                            <Text style={styles.cardTitle}>Title</Text>
+                                            <Text style={styles.cardPrice}>$ 100</Text>
+                                        </View>
 
-                                    {/* icon heart */}
-                                    <Icon name="heart-outline" size={30} color={Colors.secondary} />
+                                        {/* icon heart */}
+                                        <Icon name="heart-outline" size={30} color={Colors.secondary} />
+                                    </View>
                                 </View>
-                            </View>
+                            </Pressable>
 
                             <View style={styles.cardVertical}>
                                 <View style={styles.cardHeader}>
