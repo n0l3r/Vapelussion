@@ -27,17 +27,17 @@ const Settings = ({ navigation }) => {
 
                             <View style={styles.cardContentRow}>
                                 <Icon name="account-outline" size={30} color={Colors.secondary} />
-                                <TextInput style={styles.menuText} placeholder="John Doe" />
+                                <TextInput style={styles.menuText} placeholder="John Doe" placeholderTextColor={Colors.secondary} />
                             </View>
 
 
                             <View style={styles.cardContentRow}>
                                 <Icon name="gmail" size={30} color={Colors.secondary} />
-                                <TextInput style={styles.menuText} placeholder="johndoe12@gmail.com" />
+                                <TextInput style={styles.menuText} placeholder="johndoe12@gmail.com" placeholderTextColor={Colors.secondary} />
                             </View>
                             <View style={styles.cardContentRow}>
                                 <Icon name="phone-outline" size={30} color={Colors.secondary} />
-                                <TextInput style={styles.menuText} placeholder="08991234525" />
+                                <TextInput style={styles.menuText} placeholder="08991234525" placeholderTextColor={Colors.secondary} />
                             </View>
 
                             <View style={styles.btnLarge}>

@@ -48,11 +48,11 @@ const DetailProduct = ({ navigation }) => {
         <View style={styles.row}>
           <View style={styles.buttonGroup}>
             <Pressable style={styles.button}>
-              <Icon name="plus-circle-outline" size={30} color={Colors.secondary} />
+              <Icon name="minus-circle-outline" size={30} color={Colors.secondary} />
             </Pressable>
             <Text style={styles.buttonText}>0</Text>
             <Pressable style={styles.button}>
-              <Icon name="minus-circle-outline" size={30} color={Colors.secondary} />
+              <Icon name="plus-circle-outline" size={30} color={Colors.secondary} />
             </Pressable>
           </View>
           <Pressable style={styles.buttonAdd}>

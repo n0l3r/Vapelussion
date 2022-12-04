@@ -21,8 +21,7 @@ const Notification = ({ navigation }) => {
               <Text style={styles.cardTitle}>Title</Text>
               <Text style={styles.cardText}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-                vitae elit libero, a pharetra augue. Donec id elit non mi porta
-                gravida at eget metus.{" "}
+                vitae elit libero,
               </Text>
             </View>
             <View style={styles.cardFooterHorizontal}>

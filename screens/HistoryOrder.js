@@ -30,7 +30,7 @@ const HistoryOrder = ({ navigation }) => {
 
                         <View style={styles.cardContentHorizontal}>
                             <Text style={styles.cardTitle}>Title</Text>
-                            <Text style={styles.cardDesc}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc sit amet aliquet lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lorem. </Text>
+                            <Text style={styles.cardDesc}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc sit amet aliquet lacinia </Text>
                             <View style={styles.row}>
                             <Text style={styles.cardPrice}>$100</Text>
                             </View>
