@@ -11,19 +11,21 @@ const Wishlist = ({ navigation }) => {
             <Header title="Wishlist" />
             <ScrollView style={styles.body}>
                 <View style={styles.content}>
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
+                    <Pressable onPress={() => navigation.navigate('DetailProduct')}>
+                        <View style={styles.cardVertical}>
+                            <View style={styles.cardHeader}>
                             </View>
+                            <View style={styles.cardFooter}>
+                                <View style={styles.cardFooterLeft}>
+                                    <Text style={styles.cardTitle}>Title</Text>
+                                    <Text style={styles.cardPrice}>$ 100</Text>
+                                </View>
 
-                            {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
+                                {/* icon heart */}
+                                <Icon name="heart" size={30} color={Colors.danger} />
+                            </View>
                         </View>
-                    </View>
+                    </Pressable>
 
                     <View style={styles.cardVertical}>
                         <View style={styles.cardHeader}>

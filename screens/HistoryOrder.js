@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, Dimensions, Pressable } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Header from '../components/Header';
@@ -8,7 +8,7 @@ import Header from '../components/Header';
 import { Colors, screenOptions } from '../utils';
 
 
-const Cart = ({ navigation }) => {
+const HistoryOrder = ({ navigation }) => {
     useEffect(() => {
         navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
     }, [navigation])
@@ -19,7 +19,7 @@ const Cart = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Header title="Cart" back={back} />
+            <Header title="HistoryOrder" back={back} />
 
             <ScrollView style={styles.body}>
                 {/* Card Info Profile */}
@@ -30,37 +30,22 @@ const Cart = ({ navigation }) => {
 
                         <View style={styles.cardContentHorizontal}>
                             <Text style={styles.cardTitle}>Title</Text>
+                            <Text style={styles.cardDesc}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc sit amet aliquet lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lorem. </Text>
                             <View style={styles.row}>
-                                <Icon name="minus" size={30} color={Colors.secondary} />
-                                <Text style={styles.cardText}>1</Text>
-                                <Icon name="plus" size={30} color={Colors.secondary} />
-                            </View>
-
-                        </View>
-                        <View style={styles.cardFooterHorizontal}>
-                            <View style={styles.end}>
-                                <Icon name="checkbox-blank-outline" size={30} color={Colors.secondary} />
-                            </View>
                             <Text style={styles.cardPrice}>$100</Text>
+                            </View>
 
                         </View>
+                        
                     </View>
                 </View>
 
             </ScrollView>
-            <View style={styles.footer}>
-
-                <Pressable style={styles.buttonAdd} onPress={() => navigation.navigate('Checkout')}>
-                    <Icon name="cart-check" size={30} color={Colors.light} />
-                    <Text style={styles.buttonAddText}>Checkout</Text>
-                </Pressable>
-
-            </View>
         </View>
     )
 }
 
-export default Cart
+export default HistoryOrder
 
 const styles = StyleSheet.create({
     container: {
@@ -94,21 +79,22 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.secondary,
     },
     cardContentHorizontal: {
-        width: '50%',
+        width: '70%',
         height: '100%',
         paddingLeft: 15,
-        justifyContent: 'space-between',
-    },
-    cardFooterHorizontal: {
-        width: '20%',
-        height: '100%',
-        justifyContent: 'space-between'
     },
     cardTitle: {
         color: Colors.light,
         fontSize: 20,
         fontWeight: 'bold',
+        marginBottom: 5,
     },
+    cardDesc: {
+        color: Colors.light,
+        fontSize: 14,
+        marginBottom: 10
+    },
+
     cardPrice: {
         color: Colors.secondary,
         fontSize: 18,
@@ -128,27 +114,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '50%',
-    },
-
-    footer: {
-        backgroundColor: Colors.bgHeader,
-        padding: '5%',
-
-    },
-    buttonAdd: {
-        backgroundColor: Colors.info,
-        width: "100%",
-        height: 50,
-        borderRadius: 5,
-        alignItems: "center",
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    buttonAddText: {
-        color: Colors.light,
-        fontSize: 20,
-        fontWeight: "bold",
-        marginLeft: 10,
     },
 
 })

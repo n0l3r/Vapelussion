@@ -1,6 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 // Screens
-import { Wishlist, Cart } from '../screens';
+import { Wishlist, DetailProduct } from '../screens';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -8,7 +8,7 @@ const WishlistStack = () => {
     return (
         <Navigator>
             <Screen name="Wishlist" component={Wishlist} options={{ headerShown: false }} />
-            <Screen name="Cart" component={Cart} options={{ headerShown: false }}  />
+            <Screen name="DetailProduct" component={DetailProduct} options={{ headerShown: false }}  />
         </Navigator>
     )
 }

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, Dimensions, Pressable } from 'react-native'
+import { View, Text, TextInput, ScrollView, StyleSheet, Dimensions, Pressable } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Header from '../components/Header';
@@ -8,22 +8,19 @@ import Header from '../components/Header';
 import { Colors, screenOptions } from '../utils';
 
 
-const Cart = ({ navigation }) => {
-    useEffect(() => {
-        navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
-    }, [navigation])
+const Checkout = ({ navigation }) => {
     const back = () => {
-        navigation.getParent().setOptions({ tabBarStyle: screenOptions.tabBarStyle });
         navigation.goBack();
     }
 
     return (
         <View style={styles.container}>
-            <Header title="Cart" back={back} />
+            <Header title="Checkout" back={back} />
 
             <ScrollView style={styles.body}>
                 {/* Card Info Profile */}
                 <View style={styles.content}>
+                    <Text style={styles.title}>Purchase Product</Text>
                     <View style={styles.cardHorizontal}>
                         <View style={styles.cardImgHorizontal}>
                         </View>
@@ -45,12 +42,37 @@ const Cart = ({ navigation }) => {
 
                         </View>
                     </View>
+
+                    <View style={styles.card}>
+                        <View style={styles.cardContent}>
+
+                            <View style={styles.col}>
+                                <Text style={styles.cardTitle}>Penerima </Text>
+                                <Text style={styles.cardText}>John Doe</Text>
+                            </View>
+
+                            <View style={styles.col}>
+                                <Text style={styles.cardTitle}>No Handphone </Text>
+                                <Text style={styles.cardText}>John Doe</Text>
+                            </View>
+
+                            <View style={styles.col}>
+                                <Text style={styles.cardTitle}>Address </Text>
+                                <Text style={styles.cardText}>jl. Abdul Somad No.12</Text>
+                            </View>
+
+
+
+
+                        </View>
+                    </View>
                 </View>
 
             </ScrollView>
             <View style={styles.footer}>
+                <Text style={styles.cardTitle}>Total: $100</Text>
 
-                <Pressable style={styles.buttonAdd} onPress={() => navigation.navigate('Checkout')}>
+                <Pressable style={styles.buttonAdd}>
                     <Icon name="cart-check" size={30} color={Colors.light} />
                     <Text style={styles.buttonAddText}>Checkout</Text>
                 </Pressable>
@@ -60,7 +82,7 @@ const Cart = ({ navigation }) => {
     )
 }
 
-export default Cart
+export default Checkout
 
 const styles = StyleSheet.create({
     container: {
@@ -77,13 +99,19 @@ const styles = StyleSheet.create({
     content: {
         marginBottom: 20,
     },
+    title: {
+        color: Colors.light,
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
     cardHorizontal: {
         flexDirection: 'row',
         width: Dimensions.get('window').width - 25,
         height: 150,
         borderRadius: 10,
         elevation: 5,
-        marginRight: 10,
+        marginBottom: 10,
         backgroundColor: Colors.bgHeader,
         padding: 15,
     },
@@ -128,16 +156,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '50%',
+        
     },
-
+    col: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginBottom: 10,
+    },
     footer: {
         backgroundColor: Colors.bgHeader,
         padding: '5%',
-
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     buttonAdd: {
         backgroundColor: Colors.info,
-        width: "100%",
+        width: "60%",
         height: 50,
         borderRadius: 5,
         alignItems: "center",
@@ -150,5 +187,62 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginLeft: 10,
     },
+
+    card: {
+        width: Dimensions.get('window').width - 25,
+        height: 200,
+        borderRadius: 10,
+        elevation: 5,
+        marginRight: 10,
+        backgroundColor: Colors.bgHeader,
+        padding: 15,
+    },
+    cardContent: {
+        width: '100%',
+        height: '100%',
+    },
+    cardContentRow: {
+        padding: 10,
+        flexDirection: 'row',
+        borderColor: Colors.secondary,
+        borderWidth: 1,
+        borderRadius: 5,
+        marginBottom: 10,
+        alignItems: 'center',
+    },
+    cardContentLeft: {
+        width: '90%',
+        height: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    cardContentRight: {
+        width: '10%',
+        height: '100%',
+        alignItems: 'flex-end',
+    },
+    menuText: {
+        color: Colors.light,
+        fontSize: 20,
+        fontWeight: 'bold',
+        paddingLeft: 15,
+    },
+    btnLarge: {
+        width: '100%',
+        height: 50,
+        borderRadius: 10,
+        backgroundColor: Colors.info,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+        bottom: 0,
+        position: 'absolute',
+    },
+    btnLargeText: {
+        color: Colors.light,
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+
 
 })

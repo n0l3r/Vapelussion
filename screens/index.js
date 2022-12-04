@@ -5,5 +5,8 @@ import Notification from './Notification';
 import Cart from './Cart';
 import Category from './Category';
 import DetailProduct from './DetailProduct';
+import Settings from './Settings';
+import HistoryOrder from './HistoryOrder';
+import Checkout from './Checkout';
 
-export { Home, Wishlist, Profile, Notification, Cart, Category, DetailProduct };
+export { Home, Wishlist, Profile, Notification, Cart, Category, DetailProduct, Settings, HistoryOrder, Checkout };

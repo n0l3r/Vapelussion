@@ -1,73 +1,80 @@
-import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput,Pressable} from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput, Pressable } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/Header';
 
 // colors
 import { Colors, screenOptions } from '../utils';
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Header title="Profile" />
 
-        <ScrollView style={styles.body}>
-            {/* Card Info Profile */}
-            <View style={styles.content}>
-                <View style={styles.cardHorizontal}>
-                    <View style={styles.cardImgHorizontal}>
-                    </View>
-
-                    <View style={styles.cardContentHorizontal}>
-                        <Text style={styles.cardTitle}>John Doe</Text>
-                        <Text style={styles.cardText}>08991234525</Text>
-                        <Text style={styles.cardText}>johndoe12@gmail.com</Text>
-                    </View>
-                    <View style={styles.cardFooterHorizontal}>
-                        <Icon name="pencil-outline" size={30} color={Colors.secondary} />
-                    </View>
-                </View>
-            </View>
-
-            <View style={styles.content}>
-                <View style={styles.card}>
-                    <View style={styles.cardContent}>
-                        <View style={styles.cardContentRow}>
-                            <View style={styles.cardContentLeft}>
-                                <Icon name="cog-outline" size={30} color={Colors.secondary} />
-                                <Text style={styles.menuText}>Settings</Text>
-                            </View>
-                            <View style={styles.cardContentRight}>
-                                <Icon name="chevron-right" size={30} color={Colors.secondary} />
-                            </View>
+            <ScrollView style={styles.body}>
+                {/* Card Info Profile */}
+                <View style={styles.content}>
+                    <View style={styles.cardHorizontal}>
+                        <View style={styles.cardImgHorizontal}>
                         </View>
 
-                        <View style={styles.cardContentRow}>
-                            <View style={styles.cardContentLeft}>
-                                <Icon name="information-outline" size={30} color={Colors.secondary} />
-                                <Text style={styles.menuText}>Information</Text>
-                            </View>
-                            <View style={styles.cardContentRight}>
-                                <Icon name="chevron-right" size={30} color={Colors.secondary} />
-                            </View>
+                        <View style={styles.cardContentHorizontal}>
+                            <Text style={styles.cardTitle}>John Doe</Text>
+                            <Text style={styles.cardText}>08991234525</Text>
+                            <Text style={styles.cardText}>johndoe12@gmail.com</Text>
                         </View>
 
-                        <View style={styles.cardContentRow}>
-                            <View style={styles.cardContentLeft}>
-                                <Icon name="format-list-bulleted" size={30} color={Colors.secondary} />
-                                <Text style={styles.menuText}>Order History</Text>
-                            </View>
-                            <View style={styles.cardContentRight}>
-                                <Icon name="chevron-right" size={30} color={Colors.secondary} />
-                            </View>
-                        </View>
-
-                        <View style={styles.btnLarge}>
-                            <Text style={styles.btnLargeText}>Logout</Text>
+                        <View style={styles.cardFooterHorizontal}>
+                            <Pressable onPress={() => navigation.navigate('Settings')}>
+                                <Icon name="pencil-outline" size={30} color={Colors.secondary} />
+                            </Pressable>
                         </View>
                     </View>
                 </View>
-            </View>
-        </ScrollView>
+
+                <View style={styles.content}>
+                    <View style={styles.card}>
+                        <View style={styles.cardContent}>
+                            <Pressable onPress={() => navigation.navigate('Settings')}>
+                                <View style={styles.cardContentRow}>
+                                    <View style={styles.cardContentLeft}>
+                                        <Icon name="cog-outline" size={30} color={Colors.secondary} />
+                                        <Text style={styles.menuText}>Settings</Text>
+                                    </View>
+                                    <View style={styles.cardContentRight}>
+                                        <Icon name="chevron-right" size={30} color={Colors.secondary} />
+                                    </View>
+                                </View>
+                            </Pressable>
+
+                            <View style={styles.cardContentRow}>
+                                <View style={styles.cardContentLeft}>
+                                    <Icon name="information-outline" size={30} color={Colors.secondary} />
+                                    <Text style={styles.menuText}>Information</Text>
+                                </View>
+                                <View style={styles.cardContentRight}>
+                                    <Icon name="chevron-right" size={30} color={Colors.secondary} />
+                                </View>
+                            </View>
+
+                            <Pressable onPress={() => navigation.navigate('HistoryOrder')}>
+                                <View style={styles.cardContentRow}>
+                                    <View style={styles.cardContentLeft}>
+                                        <Icon name="format-list-bulleted" size={30} color={Colors.secondary} />
+                                        <Text style={styles.menuText}>Order History</Text>
+                                    </View>
+                                    <View style={styles.cardContentRight}>
+                                        <Icon name="chevron-right" size={30} color={Colors.secondary} />
+                                    </View>
+                                </View>
+                            </Pressable>
+
+                            <View style={styles.btnLarge}>
+                                <Text style={styles.btnLargeText}>Logout</Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </ScrollView>
         </View>
     )
 }
@@ -86,32 +93,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: Colors.bgDark,
         padding: 10,
-    },
-    header: {
-        flexDirection: 'row',
-        height: '8%',
-        backgroundColor: Colors.bgHeader,
-        paddingHorizontal: '4%',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: Platform.OS === 'ios' ? -10 : 0,
-    },
-    inputGroup: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: Colors.bgDark,
-        borderRadius: 30,
-        paddingHorizontal: '2%',
-        width: '90%',
-        height: '60%',
-    },
-    input: {
-        marginLeft: '2%',
-        width: '81%',
-        fontSize: 18,
-        height: '90%',
-        color: Colors.secondary,
-        backgroundColor: Colors.bgDark,
     },
     content: {
         marginBottom: 20,
@@ -169,7 +150,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderBottomColor: Colors.secondary,
         borderBottomWidth: 1,
-        marginBottom: 10,
+        marginBottom: 20,
     },
     cardContentLeft: {
         width: '90%',
