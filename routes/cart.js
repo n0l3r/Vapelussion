@@ -1,37 +1,21 @@
 const express = require('express');
-const db = require('./config/db');
+const verifyJWT = require('../middlewares/verifyJWT');
+const { getAllCartByUser, addCart, deleteCart, updateCart, checkout } = require('../controllers/cartController');
 
 const cartRouter = express.Router();
 
 // Get all carts by user
-cartRouter.get('/:userId', (req, res) => {
-    let sql = "SELECT * FROM carts WHERE user_id="+req.params.userId;
-    db.query(sql, (err, result) => {
-        if(err) throw err;
-        res.send(result);
-    });
-
-});
+cartRouter.get('/:userId', verifyJWT, getAllCartByUser);
 
 // Add new cart
-cartRouter.post('/add', (req, res) => {
-    let data = {user_id: req.body.user_id, product_id: req.body.product_id, quantity: req.body.quantity};
-    let sql = "INSERT INTO carts SET ?";
-    db.query(sql, data, (err, result) => {
-        if(err) throw err;
-        res.send('Cart added successfully');
-    });
+cartRouter.post('/add', verifyJWT, addCart);
 
-});
+// Update cart
+cartRouter.put('/update/:user_id/:product_id', verifyJWT, updateCart);
 
 // Delete cart
-cartRouter.delete('/delete/:user_id/:product_id', (req, res) => {
-    let sql = "DELETE FROM carts WHERE user_id="+req.params.user_id+" AND product_id="+req.params.product_id;
-    db.query(sql, (err, result) => {
-        if(err) throw err;
-        res.send('Cart deleted successfully');
-    });
+cartRouter.delete('/delete/:user_id/:product_id', verifyJWT, deleteCart);
 
-});
+cartRouter.delete('/delete/:user_id', verifyJWT, checkout);
 
 module.exports = cartRouter;

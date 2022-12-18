@@ -1,33 +1,18 @@
 const db = require('../config/db');
 const express = require('express');
+const verifyJWT = require('../middlewares/verifyJWT');
+const { getAllProducts, getProductById, getProductsByCategory } = require('../controllers/productController');
+
 const productRouter = express.Router();
 
 // Get all products
-productRouter.get('/', (req, res) => {
-    let sql = "SELECT * FROM products";
-    db.query(sql, (err, result) => {
-        if(err) throw err;
-        res.send(result);
-    });
-});
+productRouter.get('/', verifyJWT, getAllProducts);
 
 // Get single product
-productRouter.get('/:id', (req, res) => {
-    let sql = "SELECT * FROM products WHERE id="+req.params.id;
-    db.query(sql, (err, result) => {
-        if(err) throw err;
-        res.send(result);
-    });
-});
+productRouter.get('/:id', verifyJWT, getProductById);
 
 // Get products by category
-productRouter.get('/category/:id', (req, res) => {
-    let sql = "SELECT * FROM products WHERE category_id="+req.params.id;
-    db.query(sql, (err, result) => {
-        if(err) throw err;
-        res.send(result);
-    });
-});
+productRouter.get('/category/:id', verifyJWT, getProductsByCategory);
 
 // Add new product
 productRouter.post('/add', (req, res) => {

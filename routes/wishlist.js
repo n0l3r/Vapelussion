@@ -1,34 +1,16 @@
-const db = require('../config/db');
 const express = require('express');
+const { getAllWishlistByUser, addWishlist, deleteWishlist } = require('../controllers/wishlistController');
+const verifyJWT = require('../middlewares/verifyJWT');
 const wishlistRouter = express.Router();
 
 // Get all wishlists by user
-wishlistRouter.get('/:userId', (req, res) => {
-    let sql = "SELECT * FROM wishlists WHERE user_id="+req.params.userId;
-    db.query(sql, (err, result) => {
-        if(err) throw err;
-        res.send(result);
-    })
-});
+wishlistRouter.get('/:userId', verifyJWT, getAllWishlistByUser);
 
 // Add new wishlist
-wishlistRouter.post('/add', (req, res) => {
-    let data = {user_id: req.body.user_id, product_id: req.body.product_id};
-    let sql = "INSERT INTO wishlists SET ?";
-    db.query(sql, data, (err, result) => {
-        if(err) throw err;
-        res.send('Wishlist added successfully');
-    });
-});
+wishlistRouter.post('/add', verifyJWT, addWishlist);
 
 // Delete wishlist
-wishlistRouter.delete('/delete/:user_id/:product_id', (req, res) => {
-    let sql = "DELETE FROM wishlists WHERE user_id="+req.params.user_id+" AND product_id="+req.params.product_id;
-    db.query(sql, (err, result) => {
-        if(err) throw err;
-        res.send('Wishlist deleted successfully');
-    });
-});
+wishlistRouter.delete('/delete/:user_id/:product_id', verifyJWT, deleteWishlist);
 
 module.exports = wishlistRouter;
 
