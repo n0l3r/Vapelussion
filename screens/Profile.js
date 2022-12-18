@@ -68,9 +68,10 @@ const Profile = ({ navigation }) => {
                                 </View>
                             </Pressable>
 
-                            <View style={styles.btnLarge}>
+                            <Pressable onPress={() => navigation.navigate('AuthStack')} style={styles.btnLarge}>
                                 <Text style={styles.btnLargeText}>Logout</Text>
-                            </View>
+                            </Pressable>
+
                         </View>
                     </View>
                 </View>

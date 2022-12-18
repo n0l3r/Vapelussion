@@ -7,6 +7,11 @@ import SearchBar from '../components/SearchBar';
 import { Colors, screenOptions } from '../utils';
 
 const Home = ({ navigation }) => {
+
+    useEffect(() => {
+        navigation.getParent().setOptions({ tabBarStyle: screenOptions.tabBarStyle });
+    }, [navigation])
+
     return (
         <View style={styles.container}>
             <SearchBar navigation={navigation} />
@@ -89,9 +94,9 @@ const Home = ({ navigation }) => {
                     </View>
                 </View>
 
-                {/* offers */}
+                {/* For You */}
                 <View style={styles.content}>
-                    <Text style={styles.title}>Offers</Text>
+                    <Text style={styles.title}>For You</Text>
                     <View style={styles.horizontalScroll}>
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
                             <Pressable onPress={() => navigation.navigate('DetailProduct')}>

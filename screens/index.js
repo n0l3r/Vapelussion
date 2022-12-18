@@ -8,5 +8,7 @@ import DetailProduct from './DetailProduct';
 import Settings from './Settings';
 import HistoryOrder from './HistoryOrder';
 import Checkout from './Checkout';
+import Login from './Login';
+import Register from './Register';
 
-export { Home, Wishlist, Profile, Notification, Cart, Category, DetailProduct, Settings, HistoryOrder, Checkout };
+export { Home, Wishlist, Profile, Notification, Cart, Category, DetailProduct, Settings, HistoryOrder, Checkout, Login, Register };
