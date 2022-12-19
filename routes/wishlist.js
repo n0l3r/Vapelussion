@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllWishlistByUser, addWishlist, deleteWishlist } = require('../controllers/wishlistController');
+const { getAllWishlistByUser, addWishlist, deleteWishlist, getAllWishlistByUserByProduct } = require('../controllers/wishlistController');
 const verifyJWT = require('../middlewares/verifyJWT');
 const wishlistRouter = express.Router();
 
@@ -7,10 +7,13 @@ const wishlistRouter = express.Router();
 wishlistRouter.get('/:userId', verifyJWT, getAllWishlistByUser);
 
 // Add new wishlist
-wishlistRouter.post('/add', verifyJWT, addWishlist);
+wishlistRouter.post('/add', addWishlist);
 
 // Delete wishlist
-wishlistRouter.delete('/delete/:user_id/:product_id', verifyJWT, deleteWishlist);
+wishlistRouter.delete('/delete/:userId/:productId', verifyJWT, deleteWishlist);
+
+// Get all wishlists by user by product
+wishlistRouter.get('/check/:userId/:productId', verifyJWT, getAllWishlistByUserByProduct);
 
 module.exports = wishlistRouter;
 

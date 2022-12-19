@@ -1,55 +1,62 @@
 const db = require('../config/db');
 
 const getAllCartByUser = (req, res) => {
-    let sql = "SELECT * FROM carts WHERE user_id="+req.params.userId;
+    // let sql = "SELECT * FROM carts WHERE user_id="+req.params.userId;
+    // db.query(sql, (err, result) => {
+    //     if(err) res.status(500).send(err);
+    //     res.send(result);
+    // })
+    // join table carts and products
+    let sql = "SELECT carts.id, carts.user_id, carts.product_id, carts.quantity, products.name, products.price, products.image FROM carts JOIN products ON carts.product_id=products.id WHERE carts.user_id=" + req.params.userId;
     db.query(sql, (err, result) => {
-        if(err) res.status(500).send(err);
+        if (err) res.status(500).send(err);
         res.send(result);
     })
+
 }
 
 const addCart = (req, res) => {
     let data = {
-        user_id: req.body.user_id, 
-        product_id: req.body.product_id, 
-        quantity: req.body.quantity};
+        user_id: req.body.data.user_id,
+        product_id: req.body.data.product_id,
+        quantity: req.body.data.quantity
+    };
     let sql = "INSERT INTO carts SET ?";
     db.query(sql, data, (err, result) => {
-        if(err) res.status(500).send(err);
+        if (err) res.status(500).send(err);
         res.status(203).send('Cart added successfully');
     })
 }
 
 const updateCart = (req, res) => {
-    let data = {quantity: req.body.quantity};
-    let sql = "UPDATE carts SET ? WHERE user_id="+req.params.user_id+" AND product_id="+req.params.product_id;
+    let data = { quantity: req.body.data.quantity };
+    let sql = "UPDATE carts SET quantity=" + req.body.data.quantity + " WHERE id=" + req.params.cartId;
     db.query(sql, data, (err, result) => {
-        if(err) res.status(500).send(err);
+        if (err) res.status(500).send(err);
         res.status(203).send('Cart updated successfully');
     })
 }
 
 const deleteCart = (req, res) => {
-    let sql = "DELETE FROM cart WHERE user_id="+req.params.user_id+" AND product_id="+req.params.product_id;
+    let sql = "DELETE FROM carts WHERE id = " + req.params.cartId;
     db.query(sql, (err, result) => {
-        if(err) res.status(500).send
+        if (err) res.status(500).send
         res.status(203).send('Cart deleted successfully');
     })
 }
 
 const checkout = (req, res) => {
-    for(let i=0; i<req.body.data; i++){
-        let sql = "DELETE FROM cart WHERE user_id="+req.params.user_id+" AND product_id="+req.body.data[i].product_id;
+    let sql = "INSERT INTO orders SELECT * FROM carts WHERE user_id=" + req.params.userId;
+    db.query(sql, (err, result) => {
+        if (err) res.status(500).send(err);
+        let sql = "DELETE FROM carts WHERE user_id=" + req.params.userId;
         db.query(sql, (err, result) => {
-            if(err) res.status(500).send(err);
-            let sqlHistory = "INSERT INTO orders SET ?";
-            db.query(sqlHistory, req.body.data[i], (err, result) => {
-                if(err) res.status(500).send(err)
-                
-            })
+            if (err) res.status(500).send(err);
+            res.status(203).send({ status: "success", message: "Checkout success" });
         })
-    }
-    res.status(203).send({status: "success", message: "Checkout success"});
+    })
+
+
 }
 
 

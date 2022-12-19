@@ -9,7 +9,7 @@ const getAllNotificationsByUser = (req, res) => {
 }
 
 const addNotification = (req, res) => {
-    let data = {user_id: req.body.user_id, message: req.body.message};
+    let data = {user_id: req.body.data.user_id, message: req.body.data.message};
     let sql = "INSERT INTO notifications SET ?";
     db.query(sql, data, (err, result) => {
         if(err) res.status(500).send
@@ -18,7 +18,7 @@ const addNotification = (req, res) => {
 }
 
 const deleteNotification = (req, res) => {
-    let sql = "DELETE FROM notifications WHERE user_id="+req.params.user_id+" AND product_id="+req.params.product_id;
+    let sql = "DELETE FROM notifications WHERE id="+req.params.notifId;
     db.query(sql, (err, result) => {
         if(err) res.status(500).send
         res.status(203).send('Notification deleted successfully');
