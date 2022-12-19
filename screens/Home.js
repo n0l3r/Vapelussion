@@ -1,12 +1,18 @@
-import { useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, Pressable } from 'react-native'
+import { useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, Dimensions, ScrollView, Pressable, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import SearchBar from '../components/SearchBar';
 
 import { Colors, screenOptions } from '../utils';
 
+import { AuthContext } from '../context/AuthContext';
+
 const Home = ({ navigation }) => {
+
+    const { user, isLogin } = useContext(AuthContext);
+
+    console.log(user);
 
     useEffect(() => {
         navigation.getParent().setOptions({ tabBarStyle: screenOptions.tabBarStyle });
@@ -43,52 +49,71 @@ const Home = ({ navigation }) => {
                     <Text style={styles.title}>Category</Text>
                     <View style={styles.horizontalScroll}>
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                            <Pressable onPress={() => navigation.navigate('Category')}>
+                            <Pressable onPress={() => navigation.navigate('Category', { categoryId: 1, category: "Cotton" })}>
                                 <View style={styles.cardSquare}>
                                     <View style={styles.cardHeaderSquare}>
-
+                                        <Image source={require('../assets/icon/cotton.png')} style={styles.cardImgSquare} />
                                     </View>
                                     <View style={styles.cardFooterSquare}>
-                                        <Text style={styles.cardTitle}>Title</Text>
+                                        <Text style={styles.cardTitle}>Cotton</Text>
                                     </View>
                                 </View>
                             </Pressable>
 
-                            <View style={styles.cardSquare}>
-                                <View style={styles.cardHeaderSquare}>
+                            <Pressable onPress={() => navigation.navigate('Category', { categoryId: 2, category: "Mod" })}>
+                                <View style={styles.cardSquare}>
+                                    <View style={styles.cardHeaderSquare}>
+                                        <Image source={require('../assets/icon/mod.png')} style={styles.cardImgSquare} />
+                                    </View>
+                                    <View style={styles.cardFooterSquare}>
+                                        <Text style={styles.cardTitle}>Mod</Text>
+                                    </View>
+                                </View>
+                            </Pressable>
 
+                            <Pressable onPress={() => navigation.navigate('Category', { categoryId: 3, category: "RDA" })}>
+                                <View style={styles.cardSquare}>
+                                    <View style={styles.cardHeaderSquare}>
+                                        <Image source={require('../assets/icon/rda.png')} style={styles.cardImgSquare} />
+                                    </View>
+                                    <View style={styles.cardFooterSquare}>
+                                        <Text style={styles.cardTitle}>RDA</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.cardFooterSquare}>
-                                    <Text style={styles.cardTitle}>Title</Text>
-                                </View>
-                            </View>
+                            </Pressable>
 
-                            <View style={styles.cardSquare}>
-                                <View style={styles.cardHeaderSquare}>
+                            <Pressable onPress={() => navigation.navigate('Category', { categoryId: 4, category: "OCC" })}>
+                                <View style={styles.cardSquare}>
+                                    <View style={styles.cardHeaderSquare}>
+                                        <Image source={require('../assets/icon/occ.png')} style={styles.cardImgSquare} />
+                                    </View>
+                                    <View style={styles.cardFooterSquare}>
+                                        <Text style={styles.cardTitle}>OCC</Text>
+                                    </View>
+                                </View>
+                            </Pressable>
 
+                            <Pressable onPress={() => navigation.navigate('Category', { categoryId: 5, category: "Liquid Saltnic" })}>
+                                <View style={styles.cardSquare}>
+                                    <View style={styles.cardHeaderSquare}>
+                                        <Image source={require('../assets/icon/saltnic.png')} style={styles.cardImgSquare} />
+                                    </View>
+                                    <View style={styles.cardFooterSquare}>
+                                        <Text style={styles.cardTitle}>Saltnic</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.cardFooterSquare}>
-                                    <Text style={styles.cardTitle}>Title</Text>
-                                </View>
-                            </View>
+                            </Pressable>
 
-                            <View style={styles.cardSquare}>
-                                <View style={styles.cardHeaderSquare}>
-
+                            <Pressable onPress={() => navigation.navigate('Category', { categoryId: 6, category: "Liquid Freebase" })}>
+                                <View style={styles.cardSquare}>
+                                    <View style={styles.cardHeaderSquare}>
+                                        <Image source={require('../assets/icon/freebase.png')} style={styles.cardImgSquare} />
+                                    </View>
+                                    <View style={styles.cardFooterSquare}>
+                                        <Text style={styles.cardTitle}>Freebase</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.cardFooterSquare}>
-                                    <Text style={styles.cardTitle}>Title</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.cardSquare}>
-                                <View style={styles.cardHeaderSquare}>
-
-                                </View>
-                                <View style={styles.cardFooterSquare}>
-                                    <Text style={styles.cardTitle}>Title</Text>
-                                </View>
-                            </View>
+                            </Pressable>
 
                         </ScrollView>
                     </View>
@@ -197,21 +222,28 @@ const styles = StyleSheet.create({
     },
     cardSquare: {
         width: 100,
-        height: 100,
+        height: 120,
         borderRadius: 10,
         elevation: 5,
         marginRight: 10,
-        backgroundColor: Colors.bgHeader,
+        // backgroundColor: Colors.bgHeader,
         marginRight: 10,
     },
     cardHeaderSquare: {
         width: '100%',
         height: '100%',
         borderRadius: 10,
-        backgroundColor: Colors.secondary,
+        // backgroundColor: Colors.secondary,
     },
+    cardImgSquare: {
+        width: '100%',
+        height: '80%',
+        // borderRadius: 10,
+    },
+
     cardFooterSquare: {
         width: '100%',
+        paddingTop: 10,
         height: 30,
         position: 'absolute',
         bottom: 0,

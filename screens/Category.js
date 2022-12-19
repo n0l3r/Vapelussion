@@ -1,140 +1,139 @@
-import { useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, Dimensions, TextInput, Pressable } from 'react-native'
+import { useEffect, useContext, useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, Dimensions, TextInput, Pressable, FlatList, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Header from '../components/Header';
 
+// api
+import { getProductsByCategory } from '../api/productApi';
+import { addToWishlist, checkWithWishlist, deleteWishlist, getWishlist } from '../api/wishlistApi';
+
+// context
+import { AuthContext } from '../context/AuthContext';
+
 // colors
 import { Colors, screenOptions } from '../utils';
 
-const Category = ({ navigation }) => {
+const Category = ({ navigation, route }) => {
+
+    const title = route.params.category;
+
+    const { user, baseUrl } = useContext(AuthContext);
+
+    const [products, setProducts] = useState([]);
+
+    const [wishlist, setWishlist] = useState([]);
+
+
     useEffect(() => {
+        getProductsByCategory(route.params.categoryId, user.token)
+            .then((response) => {
+                let newProducts = response.data.map((item) => {
+                    item.wishlist = false;
+                    return item;
+                })
+                setProducts(newProducts);
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+        getWishlist(user.id, user.token)
+            .then((response) => {
+                setWishlist(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
+        wishlist.map((item) => {
+            if (item.product_id === product.id) {
+                product.wishlist = true;
+            }
+        })
+
+
         navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
-    }, [navigation])
-    
+    }, [])
+
     const back = () => {
         navigation.getParent().setOptions({ tabBarStyle: screenOptions.tabBarStyle });
         navigation.goBack();
     }
 
-    return (
-        <View style={styles.container}>
-            <Header title="Category" back={back} />
-            <ScrollView style={styles.body}>
-                <View style={styles.content}>
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
+    const addToWislistHandler = (id, status) => {
+        if (status === true) {
+            deleteWishlist(user.id, id, user.token)
+                .then((response) => {
+                    console.log(response.data);
+                    
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        } else {
+            addToWishlist({ user_id: user.id, product_id: id }, user.token)
+                .then((response) => {
+                    console.log(response.data);
+                    
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
 
-                            {/* icon heart */}
-                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
-                        </View>
+        const newProduct = products.map((item) => {
+            if (item.id === id && item.wishlist === false) {
+                item.wishlist = true;
+            } else if (item.id === id && item.wishlist === true) {
+                item.wishlist = false;
+            }
+            return item;
+        })
+        setProducts(newProduct);
+
+    }
+
+    const renderItem = (item) => {
+        const product = item;
+        const image = `${baseUrl}/${product.image}`
+
+        
+
+        return (
+            <Pressable style={styles.card} onPress={() => navigation.navigate('DetailProduct', { productId: product.id })}>
+                <View style={styles.cardVertical}>
+                    <View style={styles.cardHeader}>
+                        <Image source={{ uri: image }} style={styles.cardImage} />
                     </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
+                    <View style={styles.cardFooter}>
+                        <View style={styles.cardFooterLeft}>
+                            <Text style={styles.cardTitle}>{product.name}</Text>
+                            <Text style={styles.cardPrice}>{product.price}</Text>
                         </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
+                        <Pressable onPress={() => addToWislistHandler(product.id, product.wishlist)}>
+                            <Icon name={product.wishlist ? "heart" : "heart-outline"} size={30} color={product.wishlist ? Colors.danger : Colors.light} />
+                        </Pressable>
 
-                            {/* icon heart */}
-                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
-                        </View>
-                    </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
-                        </View>
-                    </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
-                        </View>
-                    </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
-                        </View>
-                    </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
-                        </View>
-                    </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
-                        </View>
-                    </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart-outline" size={30} color={Colors.secondary} />
-                        </View>
                     </View>
                 </View>
-            </ScrollView>
+            </Pressable>
+        )
+    }
+
+
+
+
+    
+
+
+
+    return (
+        <View style={styles.container}>
+            <Header title={title} back={back} />
+            <FlatList style={styles.body} data={products} renderItem={({ item }) => renderItem(item)} numColumns={2} keyExtractor={item => item.id} />
+
         </View>
     )
 }
@@ -168,13 +167,19 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.bgHeader,
         padding: 10,
         marginBottom: 20,
+        marginHorizontal: 5,
     },
     cardHeader: {
         width: '100%',
         height: '80%',
         borderRadius: 5,
         marginBottom: 10,
-        backgroundColor: Colors.secondary,
+        // backgroundColor: Colors.secondary,
+    },
+    cardImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 5,
     },
     cardFooter: {
         width: '100%',

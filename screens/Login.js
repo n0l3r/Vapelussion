@@ -1,14 +1,69 @@
+import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, StyleSheet, Image, TextInput, Pressable } from 'react-native'
+
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { userLogin } from '../api/authApi';
 
 // colors
 import { Colors } from '../utils'
 
+// context
+import { AuthContext } from '../context/AuthContext';
+
 const Login = ({ navigation }) => {
 
-    const handleLogin = () => {
-        navigation.navigate('HomeStack')
+    const { isLogin, setIsLogin, user, setUser } = useContext(AuthContext);
+
+    const [body, setBody] = useState({
+        email: '',
+        password: ''
+    });
+
+    const handleChange = (name, value) => {
+        setBody({ ...body, [name]: value });
     }
+
+
+    const handleLogin = () => {
+        userLogin({
+            email: body.email,
+            password: body.password
+        })
+            .then((response) => {
+                console.log(response.data.auth);
+                if(response.data.auth) {
+                    setIsLogin(true);
+
+                    const dataUser = response.data.user;
+                    setUser({
+                        id: dataUser.id,
+                        name: dataUser.name,
+                        address: dataUser.address,
+                        phone: dataUser.phone,
+                        email: dataUser.email,
+                        role: dataUser.role,
+                        image: dataUser.image,
+                        token: response.data.token
+                    });
+                    
+
+                    alert('Login Success');
+                    navigation.navigate('HomeStack');
+                } else {
+                    alert('Login Failed');
+                }
+            })
+            .catch((error) => {
+               alert('Login Failed');
+            });
+    }
+
+    useEffect(() => {
+        // if isLogin is true, redirect to HomeStack
+        if(isLogin) {
+            navigation.navigate('HomeStack');
+        }
+    }, [isLogin])
 
     return (
         <View style={styles.container}>
@@ -20,19 +75,19 @@ const Login = ({ navigation }) => {
                 <Text style={styles.title}>Login</Text>
                 <View style={styles.inputGroup}>
                     <Icon name="email-outline" size={24} color={Colors.light} />
-                    <TextInput style={styles.input} placeholder="Email/Phone" />
+                    <TextInput style={styles.input} placeholder="Email" value={body.email} onChange={(e) => handleChange('email', e.nativeEvent.text)} />
                 </View>
 
                 <View style={styles.inputGroup}>
                     <Icon name="lock-outline" size={24} color={Colors.light} />
-                    <TextInput style={styles.input} placeholder="Password" />
+                    <TextInput style={styles.input} placeholder="Password" value={body.password} onChange={(e) => handleChange('password', e.nativeEvent.text)} />
                 </View>
 
                 <Pressable style={styles.btnLarge} onPress={handleLogin}>
                     <Text style={styles.btnLargeText}>Login</Text>
                 </Pressable>
 
-                <Pressable style={styles.btnSmall}>
+                <Pressable style={styles.btnSmall} onPress={() => navigation.navigate('Register')}>
                     <Text style={styles.btnSmallText}>Sign Up</Text>
                 </Pressable>
             </View>
@@ -78,6 +133,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: '100%',
+        width: '80%',
         backgroundColor: Colors.bgDark,
         borderRadius: 10,
         paddingLeft: 10,

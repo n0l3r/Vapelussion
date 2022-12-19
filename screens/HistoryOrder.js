@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native'
+import { useEffect, useContext, useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, Dimensions, FlatList, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Header from '../components/Header';
@@ -7,9 +7,27 @@ import Header from '../components/Header';
 // colors
 import { Colors, screenOptions } from '../utils';
 
+import { AuthContext } from '../context/AuthContext';
+
+import { getOrders } from '../api/orderApi';
+
 
 const HistoryOrder = ({ navigation }) => {
+    const { user, baseUrl } = useContext(AuthContext);
+
+    const [orders, setOrders] = useState([]);
+
+
     useEffect(() => {
+        getOrders(user.id, user.token)
+            .then((response) => {
+                setOrders(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+
         navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
     }, [navigation])
     const back = () => {
@@ -17,30 +35,34 @@ const HistoryOrder = ({ navigation }) => {
         navigation.goBack();
     }
 
+    const renderItem = (item) => {
+        console.log(item);
+        const product = item
+        const image = `${baseUrl}/${product.image}`
+        return (
+            <View style={styles.cardHorizontal}>
+                <View style={styles.cardImgHorizontal}>
+                    <Image style={styles.cardImg} source={{ uri: image }} />
+                </View>
+
+                <View style={styles.cardContentHorizontal}>
+                    <Text style={styles.cardTitle}>{product.name}</Text>
+                    <Text style={styles.cardDesc}>{product.description} </Text>
+                    <View style={styles.row}>
+                        <Text style={styles.cardPrice}>{product.price}</Text>
+                    </View>
+
+                </View>
+
+            </View>
+        )
+    }
+
     return (
         <View style={styles.container}>
             <Header title="HistoryOrder" back={back} />
 
-            <ScrollView style={styles.body}>
-                {/* Card Info Profile */}
-                <View style={styles.content}>
-                    <View style={styles.cardHorizontal}>
-                        <View style={styles.cardImgHorizontal}>
-                        </View>
-
-                        <View style={styles.cardContentHorizontal}>
-                            <Text style={styles.cardTitle}>Title</Text>
-                            <Text style={styles.cardDesc}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc sit amet aliquet lacinia </Text>
-                            <View style={styles.row}>
-                            <Text style={styles.cardPrice}>$100</Text>
-                            </View>
-
-                        </View>
-                        
-                    </View>
-                </View>
-
-            </ScrollView>
+            <FlatList style={styles.body} data={orders} renderItem={({ item }) => renderItem(item)} keyExtractor={(item) => item.id} />
         </View>
     )
 }
@@ -71,12 +93,18 @@ const styles = StyleSheet.create({
         marginRight: 10,
         backgroundColor: Colors.bgHeader,
         padding: 15,
+        marginBottom: 10,
     },
     cardImgHorizontal: {
         width: '30%',
         height: '100%',
         borderRadius: 5,
-        backgroundColor: Colors.secondary,
+        // backgroundColor: Colors.secondary,
+    },
+    cardImg : {
+        width: '100%',
+        height: '100%',
+        borderRadius: 5,
     },
     cardContentHorizontal: {
         width: '70%',

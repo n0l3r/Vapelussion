@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput, Pressable } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Dimensions, Pressable, FlatList, Image } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
@@ -6,30 +6,65 @@ import SearchBar from "../components/SearchBar";
 // colors
 import { Colors, screenOptions } from '../utils';
 
+import { AuthContext } from '../context/AuthContext';
+import { useEffect, useContext, useState } from "react";
+import { getNotification, deleteNotification } from "../api/notificationApi";
+
 const Notification = ({ navigation }) => {
+
+  const { user, baseUrl } = useContext(AuthContext);
+
+  const [notification, setNotification] = useState([]);
+
+  useEffect(() => {
+    getNotification(user.id, user.token)
+      .then((response) => {
+        console.log(response.data);
+        setNotification(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const deleteNotificationhandler = (id) => {
+    deleteNotification(id, user.token)
+      .then((response) => {
+        // delete from cart
+        const newNotification = notification.filter((item) => item.id !== id);
+        setNotification(newNotification);
+      }
+      )
+      .catch((error) => {
+        console.log(error);
+      }
+      );
+  };
+
+  const renderItem = (item) => {
+    return (
+      <View style={styles.cardHorizontal}>
+            <View style={styles.cardImgHorizontal}>
+              <Icon name="bell-outline" size={70} color={Colors.info} />
+            </View>
+
+            <View style={styles.cardContentHorizontal}>
+              <Text style={styles.cardTitle}>Checkout</Text>
+              <Text style={styles.cardText}>
+                {item.message}
+              </Text>
+            </View>
+            <Pressable style={styles.cardFooterHorizontal} onPress={() => deleteNotificationhandler(item.id)}>
+              <Icon name="close" size={30} color={Colors.secondary} />
+            </Pressable>
+          </View>
+    )};
+
+
   return (
     <View style={styles.container}>
       <Header title={"Notification"} />
-
-      <ScrollView style={styles.body}>
-        {/* Card Info Notification */}
-        <View style={styles.content}>
-          <View style={styles.cardHorizontal}>
-            <View style={styles.cardImgHorizontal}></View>
-
-            <View style={styles.cardContentHorizontal}>
-              <Text style={styles.cardTitle}>Title</Text>
-              <Text style={styles.cardText}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-                vitae elit libero,
-              </Text>
-            </View>
-            <View style={styles.cardFooterHorizontal}>
-              <Icon name="close" size={30} color={Colors.secondary} />
-            </View>
-          </View>
-        </View>
-      </ScrollView>
+      <FlatList style={styles.body} data={notification} renderItem={({ item }) => renderItem(item)} numColumns={2} keyExtractor={item => item.id} />
     </View>
   );
 };
@@ -93,6 +128,8 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 5,
     backgroundColor: Colors.secondary,
+    justifyContent: "center",
+    alignItems: "center",
   },
   cardContentHorizontal: {
     width: "60%",

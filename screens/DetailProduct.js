@@ -1,43 +1,94 @@
-import { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput, Pressable } from "react-native";
+import { useEffect, useContext, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput, Pressable, Image } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { getProductsById } from '../api/productApi';
+import { addToCart } from '../api/cartApi';
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
+
+import { AuthContext } from '../context/AuthContext';
 
 // colors
 import { Colors, screenOptions } from '../utils';
 
-const DetailProduct = ({ navigation }) => {
+const DetailProduct = ({ navigation, route }) => {
+
+  const { user, baseUrl } = useContext(AuthContext);
+
   useEffect(() => {
+    getProductsById(productId, user.token)
+      .then((response) => {
+        // console.log(response.data);
+        setProduct(response.data[0]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
   }, [navigation])
+
   const back = () => {
-    navigation.getParent().setOptions({ tabBarStyle: screenOptions.tabBarStyle });
     navigation.goBack();
   }
+
+  
+
+  const [product, setProduct] = useState({});
+  const [quantity, setQuantity] = useState(1);
+
+  const plusQuantity = () => {
+    setQuantity(quantity + 1);
+  }
+
+  const minusQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  }
+
+  const productId = route.params.productId;
+
+  const addToCartHandler = () => {
+    const data = {
+      user_id: user.id,
+      product_id: productId,
+      quantity: quantity
+    }
+
+    addToCart(data, user.token)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // console.log(user.token);
+        console.log(error);
+      })
+
+  }
+
   return (
     <View style={styles.container}>
-      <Header title={"DetailProduct"} back={back} />
+      <Header title={product.name} back={back} />
 
       <ScrollView style={styles.body}>
         {/* Card Info Notification */}
         <View style={styles.content}>
           <View style={styles.card}>
             <View style={styles.cardHeader}>
-
+              <Image source={{ uri: baseUrl + '/' + product.image }} style={styles.cardImage} />
             </View>
             <View style={styles.cardFooter}>
               <View style={styles.row}>
                 <View style={styles.cardFooterLeft}>
-                  <Text style={styles.cardTitle}>Title</Text>
+                  <Text style={styles.cardTitle}>{product.name}</Text>
                 </View>
                 <View style={styles.cardFooterRight}>
-                  <Text style={styles.cardPrice}>$ 100</Text>
+                  <Text style={styles.cardPrice}>{product.price}</Text>
                 </View>
               </View>
 
               <View style={styles.cardDescription}>
-                <Text style={styles.cardDescriptionText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</Text>
+                <Text style={styles.cardDescriptionText}>{product.description}</Text>
               </View>
 
             </View>
@@ -47,15 +98,18 @@ const DetailProduct = ({ navigation }) => {
       <View style={styles.footer}>
         <View style={styles.row}>
           <View style={styles.buttonGroup}>
-            <Pressable style={styles.button}>
+            <Pressable style={styles.button} onPress={minusQuantity}>
               <Icon name="minus-circle-outline" size={30} color={Colors.secondary} />
             </Pressable>
-            <Text style={styles.buttonText}>0</Text>
-            <Pressable style={styles.button}>
+
+            <Text style={styles.buttonText}>{quantity}</Text>
+
+            <Pressable style={styles.button} onPress={plusQuantity}>
               <Icon name="plus-circle-outline" size={30} color={Colors.secondary} />
             </Pressable>
           </View>
-          <Pressable style={styles.buttonAdd}>
+
+          <Pressable style={styles.buttonAdd} onPress={addToCartHandler}>
             <Text style={styles.buttonAddText}>Add to cart</Text>
           </Pressable>
         </View>
@@ -93,6 +147,12 @@ const styles = StyleSheet.create({
   cardHeader: {
     height: "70%",
     backgroundColor: Colors.bgDark,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+  },
+  cardImage: {
+    width: "100%",
+    height: "100%",
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
   },
@@ -139,7 +199,7 @@ const styles = StyleSheet.create({
   footer: {
     backgroundColor: Colors.bgHeader,
     padding: '5%',
-    
+
   },
   buttonGroup: {
     flexDirection: "row",

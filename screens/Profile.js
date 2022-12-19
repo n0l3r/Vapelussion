@@ -1,11 +1,18 @@
-import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput, Pressable } from 'react-native'
+import React, { useContext } from 'react'
+import { View, Text, StyleSheet, ScrollView, Dimensions, Image, Pressable } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/Header';
 
 // colors
 import { Colors, screenOptions } from '../utils';
 
+import { AuthContext } from '../context/AuthContext';
+
+
 const Profile = ({ navigation }) => {
+
+    const { user, baseUrl } = useContext(AuthContext);
+
     return (
         <View style={styles.container}>
             <Header title="Profile" />
@@ -15,12 +22,13 @@ const Profile = ({ navigation }) => {
                 <View style={styles.content}>
                     <View style={styles.cardHorizontal}>
                         <View style={styles.cardImgHorizontal}>
+                            <Icon name="account-circle-outline" size={70} color={Colors.info} />
                         </View>
 
                         <View style={styles.cardContentHorizontal}>
-                            <Text style={styles.cardTitle}>John Doe</Text>
-                            <Text style={styles.cardText}>08991234525</Text>
-                            <Text style={styles.cardText}>johndoe12@gmail.com</Text>
+                            <Text style={styles.cardTitle}>{user.name}</Text>
+                            <Text style={styles.cardText}>{user.phone}</Text>
+                            <Text style={styles.cardText}>{user.email}</Text>
                         </View>
 
                         <View style={styles.cardFooterHorizontal}>
@@ -101,7 +109,7 @@ const styles = StyleSheet.create({
     cardHorizontal: {
         flexDirection: 'row',
         width: Dimensions.get('window').width - 25,
-        height: 150,
+        // height: 150,
         borderRadius: 10,
         elevation: 5,
         marginRight: 10,
@@ -112,7 +120,10 @@ const styles = StyleSheet.create({
         width: '30%',
         height: '100%',
         borderRadius: 5,
-        backgroundColor: Colors.secondary,
+        // backgroundColor: Colors.secondary,
+        alignItems: 'center',
+        // justifyContent: 'center'
+
     },
     cardContentHorizontal: {
         width: '60%',

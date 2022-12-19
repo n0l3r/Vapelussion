@@ -1,131 +1,77 @@
-import { View, Text, ScrollView, StyleSheet, Dimensions, TextInput, Pressable } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { View, Text, ScrollView, StyleSheet, Dimensions, TextInput, Pressable, FlatList, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/Header';
 
 // colors
 import { Colors, screenOptions } from '../utils';
 
+import { AuthContext } from '../context/AuthContext';
+
+import { getWishlist, deleteWishlist } from '../api/wishlistApi';
+import { getProductsById } from '../api/productApi';
+
+
 const Wishlist = ({ navigation }) => {
+
+    const { user, baseUrl } = useContext(AuthContext);
+
+    const [wishlist, setWishlist] = useState([]);
+
+    useEffect(() => {
+        getWishlist(user.id, user.token)
+            .then((response) => {
+                setWishlist(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        }, [])
+
+    const deleteWishlistHandler = (id) => {
+        deleteWishlist(id, user.token)
+            .then((response) => {
+                const newWishlist = wishlist.filter((item) => item.id !== id);
+                setWishlist(newWishlist);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+
+
+    const renderItem = (item) => {
+        console.log(item);
+        const product = item;
+        const image = `${baseUrl}/${product.image}`
+
+        return (
+            <Pressable style={styles.card} onPress={() => navigation.navigate('DetailProduct', { productId: product.id })}>
+                <View style={styles.cardVertical}>
+                    <View style={styles.cardHeader}>
+                        <Image source={{ uri: image }} style={styles.cardImage} />
+                    </View>
+                    <View style={styles.cardFooter}>
+                        <View style={styles.cardFooterLeft}>
+                            <Text style={styles.cardTitle}>{product.name}</Text>
+                            <Text style={styles.cardPrice}>{product.price}</Text>
+                        </View>
+                        <Pressable onPress={() => deleteWishlistHandler(product.id)}>
+                            <Icon name="heart" size={30} color={Colors.danger}/>
+                        </Pressable>
+
+                    </View>
+                </View>
+            </Pressable>
+        )
+    }
+
     return (
         <View style={styles.container}>
             <Header title="Wishlist" />
-            <ScrollView style={styles.body}>
-                <View style={styles.content}>
-                    <Pressable onPress={() => navigation.navigate('DetailProduct')}>
-                        <View style={styles.cardVertical}>
-                            <View style={styles.cardHeader}>
-                            </View>
-                            <View style={styles.cardFooter}>
-                                <View style={styles.cardFooterLeft}>
-                                    <Text style={styles.cardTitle}>Title</Text>
-                                    <Text style={styles.cardPrice}>$ 100</Text>
-                                </View>
+            <FlatList style={styles.body} data={wishlist} renderItem={({ item }) => renderItem(item)} numColumns={2} keyExtractor={item => item.id} />
 
-                                {/* icon heart */}
-                                <Icon name="heart" size={30} color={Colors.danger} />
-                            </View>
-                        </View>
-                    </Pressable>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
-                        </View>
-                    </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
-                        </View>
-                    </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
-                        </View>
-                    </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
-                        </View>
-                    </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
-                        </View>
-                    </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
-                        </View>
-                    </View>
-
-                    <View style={styles.cardVertical}>
-                        <View style={styles.cardHeader}>
-                        </View>
-                        <View style={styles.cardFooter}>
-                            <View style={styles.cardFooterLeft}>
-                                <Text style={styles.cardTitle}>Title</Text>
-                                <Text style={styles.cardPrice}>$ 100</Text>
-                            </View>
-
-                            {/* icon heart */}
-                            <Icon name="heart" size={30} color={Colors.danger} />
-                        </View>
-                    </View>
-                </View>
-            </ScrollView>
         </View>
     )
 }
@@ -167,6 +113,11 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginBottom: 10,
         backgroundColor: Colors.secondary,
+    },
+    cardImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 5,
     },
     cardFooter: {
         width: '100%',

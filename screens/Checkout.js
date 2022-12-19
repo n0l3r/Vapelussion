@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { View, Text, TextInput, ScrollView, StyleSheet, Dimensions, Pressable } from 'react-native'
+import { useEffect, useContext, useState } from 'react';
+import { View, Text, TextInput, ScrollView, StyleSheet, Dimensions, Pressable, FlatList, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Header from '../components/Header';
@@ -7,75 +7,164 @@ import Header from '../components/Header';
 // colors
 import { Colors, screenOptions } from '../utils';
 
+import { AuthContext } from '../context/AuthContext';
+
+import { getCartByUserId, deleteCart, updateCart, checkoutCart } from '../api/cartApi';
+import { addNotification } from '../api/notificationApi';
 
 const Checkout = ({ navigation }) => {
+
+    const { user, baseUrl } = useContext(AuthContext);
+
+    const [cart, setCart] = useState([]);
+
+    useEffect(() => {
+        getCartByUserId(user.id, user.token)
+            .then((response) => {
+                setCart(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+            navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
+    }, [])
+
     const back = () => {
+        navigation.getParent().setOptions({ tabBarStyle: screenOptions.tabBarStyle });
         navigation.goBack();
     }
+
+    const plusQuantity = (id) => {
+
+
+        const newCart = cart.map((item) => {
+            if (item.id === id) {
+                item.quantity = item.quantity + 1;
+                updateCart({ quantity: item.quantity }, id, user.token)
+            }
+            return item;
+        });
+        setCart(newCart);
+    }
+
+    const minusQuantity = (id) => {
+
+        const newCart = cart.map((item) => {
+            if (item.id === id && item.quantity > 1) {
+                item.quantity = item.quantity - 1;
+                updateCart({ quantity: item.quantity }, id, user.token)
+            }
+            return item;
+        });
+        setCart(newCart);
+    }
+
+    const deleteCartHandler = (id) => {
+        deleteCart(id, user.token)
+            .then((response) => {
+                // delete from cart
+                const newCart = cart.filter((item) => item.id !== id);
+                setCart(newCart);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const checkoutHandler = () => {
+        checkoutCart(user.id, user.token)
+            .then((response) => {
+                setCart([]);
+                if(response.status === 203){
+                    addNotification({user_id: user.id, message: "Checkout Success"}, user.token)
+                    alert("Checkout Success");
+                    navigation.getParent().setOptions({ tabBarStyle: screenOptions.tabBarStyle });
+                    navigation.navigate('Home');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const renderItem = ({ item }) => {
+        console.log(item);
+        return (
+            <View style={styles.cardHorizontal}>
+                <View style={styles.cardImgHorizontal}>
+                    <Image style={styles.cardImg} source={{ uri: `${baseUrl}/${item.image}` }} />
+                </View>
+
+                <View style={styles.cardContentHorizontal}>
+                    <Text style={styles.cardTitle}>{item.name}</Text>
+                    <View style={styles.row}>
+                        <Pressable onPress={() => minusQuantity(item.id)}>
+                            <Icon name="minus" size={30} color={Colors.secondary} />
+                        </Pressable>
+                        <Text style={styles.cardText}>{item.quantity}</Text>
+                        <Pressable onPress={() => plusQuantity(item.id)}>
+                            <Icon name="plus" size={30} color={Colors.secondary} />
+                        </Pressable>
+                    </View>
+
+                </View>
+                <View style={styles.cardFooterHorizontal}>
+                    <Pressable style={styles.end} onPress={() => deleteCartHandler(item.id)}>
+                        <Icon name="close" size={30} color={Colors.secondary} />
+                    </Pressable>
+                    <Text style={styles.cardPrice}>{item.price}</Text>
+
+                </View>
+            </View>
+        )
+    }
+
 
     return (
         <View style={styles.container}>
             <Header title="Checkout" back={back} />
+            <View style={styles.body}>
+                {cart.length === 0 && <Text style={styles.title}>No items in cart</Text>}
+                <FlatList style={styles.content} data={cart} renderItem={renderItem} keyExtractor={item => item.id} />
 
-            <ScrollView style={styles.body}>
-                {/* Card Info Profile */}
-                <View style={styles.content}>
-                    <Text style={styles.title}>Purchase Product</Text>
-                    <View style={styles.cardHorizontal}>
-                        <View style={styles.cardImgHorizontal}>
+
+
+                <View style={styles.card}>
+                    <View style={styles.cardContent}>
+
+                        <View style={styles.col}>
+                            <Text style={styles.cardTitle}>Recipient </Text>
+                            <Text style={styles.cardText}>{user.name}</Text>
                         </View>
 
-                        <View style={styles.cardContentHorizontal}>
-                            <Text style={styles.cardTitle}>Title</Text>
-                            <View style={styles.row}>
-                                <Icon name="minus" size={30} color={Colors.secondary} />
-                                <Text style={styles.cardText}>1</Text>
-                                <Icon name="plus" size={30} color={Colors.secondary} />
-                            </View>
-
+                        <View style={styles.col}>
+                            <Text style={styles.cardTitle}>Phone </Text>
+                            <Text style={styles.cardText}>{user.phone}</Text>
                         </View>
-                        <View style={styles.cardFooterHorizontal}>
-                            <View style={styles.end}>
-                                <Icon name="checkbox-blank-outline" size={30} color={Colors.secondary} />
-                            </View>
-                            <Text style={styles.cardPrice}>$100</Text>
 
-                        </View>
-                    </View>
-
-                    <View style={styles.card}>
-                        <View style={styles.cardContent}>
-
-                            <View style={styles.col}>
-                                <Text style={styles.cardTitle}>Penerima </Text>
-                                <Text style={styles.cardText}>John Doe</Text>
-                            </View>
-
-                            <View style={styles.col}>
-                                <Text style={styles.cardTitle}>No Handphone </Text>
-                                <Text style={styles.cardText}>John Doe</Text>
-                            </View>
-
-                            <View style={styles.col}>
-                                <Text style={styles.cardTitle}>Address </Text>
-                                <Text style={styles.cardText}>jl. Abdul Somad No.12</Text>
-                            </View>
-
-
-
-
+                        <View style={styles.col}>
+                            <Text style={styles.cardTitle}>Address </Text>
+                            <Text style={styles.cardText}>{user.address}</Text>
                         </View>
                     </View>
                 </View>
+            </View>
 
-            </ScrollView>
+
             <View style={styles.footer}>
-                <Text style={styles.cardTitle}>Total: $100</Text>
+                <Text style={styles.cardTitle}>Total: {cart.reduce((a, b) => a + (b.price * b.quantity), 0)}</Text>
 
-                <Pressable style={styles.buttonAdd}>
-                    <Icon name="cart-check" size={30} color={Colors.light} />
-                    <Text style={styles.buttonAddText}>Checkout</Text>
-                </Pressable>
+                {cart.length > 0 ?
+                    <Pressable style={styles.buttonAdd} onPress={checkoutHandler}>
+                        <Icon name="cart-check" size={30} color={Colors.light} />
+                        <Text style={styles.buttonAddText}>Checkout</Text>
+                    </Pressable>
+                    :
+                    <View style={[styles.buttonAdd, { backgroundColor: Colors.secondary }]}>
+                        <Icon name="cart-check" size={30} color={Colors.light} />
+                        <Text style={styles.buttonAddText}>Checkout</Text>
+                    </View>
+                }
 
             </View>
         </View>
@@ -119,7 +208,12 @@ const styles = StyleSheet.create({
         width: '30%',
         height: '100%',
         borderRadius: 5,
-        backgroundColor: Colors.secondary,
+        // backgroundColor: Colors.secondary,
+    },
+    cardImg: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 5,
     },
     cardContentHorizontal: {
         width: '50%',
@@ -156,7 +250,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '50%',
-        
+
     },
     col: {
         flexDirection: 'column',

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput, Pressable } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Header from "../components/Header";
@@ -7,7 +7,42 @@ import SearchBar from "../components/SearchBar";
 // colors
 import { Colors, screenOptions } from '../utils';
 
+import { AuthContext } from '../context/AuthContext';
+import { updateProfile } from '../api/authApi';
+
+
+
 const Settings = ({ navigation }) => {
+    const { user, baseUrl } = useContext(AuthContext);
+
+    const [body, setBody] = useState({
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address
+    });
+
+    const handleChange = (name, value) => {
+        setBody({ ...body, [name]: value });
+    }
+
+    const update = () => {
+        updateProfile(body, user.id, user.token)
+            .then((response) => {
+                console.log(response.data);
+                if (response.status == 203) {
+                    alert('Update Success');
+                } else {
+                    alert('Update Failed');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+
+
     useEffect(() => {
         navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
     }, [navigation])
@@ -27,22 +62,27 @@ const Settings = ({ navigation }) => {
 
                             <View style={styles.cardContentRow}>
                                 <Icon name="account-outline" size={30} color={Colors.secondary} />
-                                <TextInput style={styles.menuText} placeholder="John Doe" placeholderTextColor={Colors.secondary} />
+                                <TextInput style={styles.menuText} value={body.name} placeholderTextColor={Colors.secondary} onChangeText={(text) => handleChange('name', text)} />
                             </View>
 
 
                             <View style={styles.cardContentRow}>
                                 <Icon name="gmail" size={30} color={Colors.secondary} />
-                                <TextInput style={styles.menuText} placeholder="johndoe12@gmail.com" placeholderTextColor={Colors.secondary} />
+                                <TextInput style={styles.menuText} value={body.email} placeholderTextColor={Colors.secondary} onChangeText={(text) => handleChange('email', text)} />
                             </View>
                             <View style={styles.cardContentRow}>
                                 <Icon name="phone-outline" size={30} color={Colors.secondary} />
-                                <TextInput style={styles.menuText} placeholder="08991234525" placeholderTextColor={Colors.secondary} />
+                                <TextInput style={styles.menuText} value={body.phone} placeholderTextColor={Colors.secondary} onChangeText={(text) => handleChange('phone', text)} />
                             </View>
 
-                            <View style={styles.btnLarge}>
-                                <Text style={styles.btnLargeText}>Save</Text>
+                            <View style={styles.cardContentRow}>
+                                <Icon name="google-maps" size={30} color={Colors.secondary} />
+                                <TextInput style={styles.menuText} value={body.address} placeholderTextColor={Colors.secondary} onChangeText={(text) => handleChange('address', text)} />
                             </View>
+
+                            <Pressable style={styles.btnLarge} onPress={update}>
+                                <Text style={styles.btnLargeText}>Save</Text>
+                            </Pressable>
                         </View>
                     </View>
                 </View>

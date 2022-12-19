@@ -1,10 +1,63 @@
+import React, { useState } from 'react'
 import { View, Text, StyleSheet, Image, TextInput, Pressable } from 'react-native'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 // colors
 import { Colors } from '../utils'
 
-const Register = () => {
+// api
+import { userRegister } from '../api/authApi'
+
+
+
+const Register = ({navigation}) => {
+    const [body, setBody] = useState({
+        name: '',
+        address: '',
+        phone: '',
+        email: '',
+        password: '',
+        role: 'user',
+        image: 'default.png'
+    });
+
+    const handleChange = (name, value) => {
+        setBody({ ...body, [name]: value });
+    }
+
+    const register = () => {
+        userRegister({
+            name: body.name,
+            address: body.address,
+            phone: body.phone,
+            email: body.email,
+            password: body.password,
+            role: body.role,
+            image: body.image
+        })
+            .then((response) => {
+                if(response.status == 203) {
+                    console.log(response.data);
+                    setBody({
+                        name: '',
+                        address: '',
+                        phone: '',
+                        email: '',
+                        password: '',
+                        role: 'user',
+                        image: 'default.png'
+                    });
+                    alert('Register Success');
+                    navigation.navigate('Login');
+                } else {
+                    alert('Register Failed');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     return (
         <View style={styles.container}>
             <View styles={styles.logo}>
@@ -16,30 +69,30 @@ const Register = () => {
 
                 <View style={styles.inputGroup}>
                     <Icon name="account-outline" size={24} color={Colors.light} />
-                    <TextInput style={styles.input} placeholder="Name" />
+                    <TextInput style={styles.input} placeholder="Name" value={body.name} onChange={(e) => handleChange('name', e.nativeEvent.text)} />
                 </View>
 
                 <View style={styles.inputGroup}>
                     <Icon name="google-maps" size={24} color={Colors.light} />
-                    <TextInput style={styles.input} placeholder="Address" />
+                    <TextInput style={styles.input} placeholder="Address" value={body.address} onChange={(e) => handleChange('address', e.nativeEvent.text)} />
                 </View>
 
                 <View style={styles.inputGroup}>
                     <Icon name="phone-outline" size={24} color={Colors.light} />
-                    <TextInput style={styles.input} placeholder="Phone" />
+                    <TextInput style={styles.input} placeholder="Phone" value={body.phone} onChange={(e) => handleChange('phone', e.nativeEvent.text)} />
                 </View>
 
                 <View style={styles.inputGroup}>
                     <Icon name="email-outline" size={24} color={Colors.light} />
-                    <TextInput style={styles.input} placeholder="Email" />
+                    <TextInput style={styles.input} placeholder="Email" value={body.email} onChange={(e) => handleChange('email', e.nativeEvent.text)} />
                 </View>
 
                 <View style={styles.inputGroup}>
                     <Icon name="lock-outline" size={24} color={Colors.light} />
-                    <TextInput style={styles.input} placeholder="Password" />
+                    <TextInput style={styles.input} placeholder="Password" value={body.password} onChange={(e) => handleChange('password', e.nativeEvent.text)} />
                 </View>
 
-                <Pressable style={styles.btnLarge}>
+                <Pressable style={styles.btnLarge} onPress={register}>
                     <Text style={styles.btnLargeText}>Register</Text>
                 </Pressable>
 

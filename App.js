@@ -1,4 +1,5 @@
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
+import React, { useContext } from 'react';
 import { StyleSheet, View, StatusBar, SafeAreaView, } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -15,6 +16,10 @@ import Register from './screens/Register';
 import { Colors, screenOptions } from './utils';
 import AuthStack from './stack/AuthStack';
 
+import { AuthContext } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
+
+
 const { Screen, Navigator } = createBottomTabNavigator();
 
 const Stack = createStackNavigator();
@@ -23,23 +28,27 @@ const Stack = createStackNavigator();
 
 
 const App = () => {
+
   return (
     <View style={styles.container}>
+      <AuthProvider>
       <SafeAreaView>
         <ExpoStatusBar backgroundColor={Colors.bgHeader} style="light" />
       </SafeAreaView>
 
-      <NavigationContainer>
-        <Navigator screenOptions={screenOptions}>
-          <Screen name="AuthStack" component={AuthStack} options={authOptions} />
-          <Screen name="HomeStack" component={HomeStack} options={homeOptions} />
-          <Screen name="WishlistStack" component={WishlistStack} options={wishlistOptions} />
-          <Screen name="NotificationStack" component={NotificationStack} options={notificationOptions} />
-          <Screen name="ProfileStack" component={ProfileStack} options={profileOptions} />
-        </Navigator>
-      </NavigationContainer>
-
       
+        <NavigationContainer>
+          <Navigator screenOptions={screenOptions}>
+            <Screen name="AuthStack" component={AuthStack} options={authOptions} />
+            <Screen name="HomeStack" component={HomeStack} options={homeOptions} />
+            <Screen name="WishlistStack" component={WishlistStack} options={wishlistOptions} />
+            <Screen name="NotificationStack" component={NotificationStack} options={notificationOptions} />
+            <Screen name="ProfileStack" component={ProfileStack} options={profileOptions} />
+          </Navigator>
+        </NavigationContainer>
+      </AuthProvider>
+
+
     </View>
   )
 }
